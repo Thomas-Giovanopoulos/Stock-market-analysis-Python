@@ -126,7 +126,7 @@ this approximation does not significantly affect comparative results.
 ## 4. Key visualizations
 
 ### Normalized Price Evolution
-![Normalized Prices](C:\Finance\Projets\Figures\stock_price_10y_N.png)
+![Normalized Prices](https://github.com/Thomas-Giovanopoulos/Stock-market-analysis/blob/c47184084baf64fc6932c8e53df83b334df09457/Figures/stock_price_10y_N.png)
 
 ### Daily returns
 ![Returns](Figures\daily_returns.png)
