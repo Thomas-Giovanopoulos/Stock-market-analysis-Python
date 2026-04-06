@@ -163,3 +163,68 @@ Sharpe Ratio table:
 - Some stocks exhibit much higher volatility than others
 - Correlations between major tech stocks are generally positive
 
+
+## 5. Discussion
+
+### Why NVIDIA Dominates
+
+NVIDIA shows exceptional growth due to its exposure to:
+
+- Artificial intelligence
+- GPU computing
+- Data centers
+
+This leads to exponential price appreciation compared to other assets.
+
+
+### Why AMD is Volatile
+
+AMD shows high volatility due to:
+
+- Competitive positioning in the semiconductor market
+- Sensitivity to market cycles
+- Rapid shifts in investor sentiment
+
+
+### Why Correlations are High
+
+Tech stocks often exhibit high correlations because:
+
+- They are influenced by similar macroeconomic factors
+- They respond similarly to interest rates and market trends
+- Sector-wide movements affect them collectively
+
+
+### Limitations
+
+- Only daily data is used (no intraday analysis)
+- Simplified assumptions
+- No consideration of external macroeconomic variables
+- Past performance does not guarantee future results
+
+
+## 6. Conclusion
+
+### Summary
+
+This project provided an overview of:
+
+- Stock price behavior over time
+- Return computation and interpretation
+- Volatility as a measure of risk
+- Correlation between assets
+- Risk-adjusted performance metrics (Sharpe ratio)
+
+### What I Learned
+
+- Practical use of Python libraries such as `pandas`, `numpy`, and `matplotlib` and `yfinace`
+- How to manipulate and analyze financial data
+- How to interpret key financial metrics
+
+
+### Possible Extensions
+
+- Portfolio optimization 
+- Moving averages and technical indicators
+- Time-series modeling (ARIMA, GARCH)
+- Inclusion of macroeconomic indicators
