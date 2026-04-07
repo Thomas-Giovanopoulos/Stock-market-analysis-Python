@@ -1,0 +1,416 @@
+\documentclass{article}
+
+\usepackage[english]{babel}
+\usepackage{fancyhdr}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fontspec}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{subcaption}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage[backend=biber,style=verbose,citetracker=true,]{biblatex}
+\usepackage{setspace}
+\usepackage{csquotes}
+\usepackage{extramarks}
+
+\setmainfont{Times New Roman}
+
+\addbibresource{References.bib}
+
+
+\newcommand{\hmwkTitle}{Python For Finance - Project 1}
+\newcommand{\hmwkDueDate}{25/03/2026}
+\newcommand{\hmwkClass}{}
+\newcommand{\hmwkClassInstructor}{Thomas Giovanopulos}
+\newcommand{\hmwkAuthorName}{}
+
+
+
+\lstset{
+    language=Python,
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue},
+    stringstyle=\color{red},
+    commentstyle=\color{gray},
+    showstringspaces=false,
+    frame=single,
+    breaklines=true
+}
+
+\renewcommand{\footnotesize}{%
+  \small\setstretch{1.2} % 1.2x line spacing
+}
+%
+% Basic Document Settings
+%
+\setlength{\skip\footins}{20pt}
+
+\topmargin=0in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=10.0in
+\headsep=0.5in
+
+
+\linespread{1.1}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\hmwkAuthorName}
+\chead{\hmwkClass\ \hmwkClassInstructor: \hmwkTitle}
+\rhead{\firstxmark}
+
+\renewcommand\headrulewidth{0.4pt}
+\renewcommand\footrulewidth{0.4pt}
+
+\setlength\parindent{1em}
+
+
+\title{
+    \vspace{2in}
+    \textmd{\textbf{\hmwkClass\ \hmwkTitle}}\\
+    \vspace{0.1in}\large{\textit{\hmwkClassInstructor}}
+    \vspace{3in}
+}
+
+\author{\hmwkAuthorName}
+\date{}
+
+\DeclareFieldFormat[article,online]{title}{\textbf{#1}}
+
+\begin{document}
+
+\maketitle
+
+\pagebreak
+
+\tableofcontents
+
+\pagebreak
+
+\section{Introduction}
+
+Financial markets offer a wide range of investment opportunities, each associated with different levels of return and risk. Understanding how assets behave over time is a fundamental step in portfolio management and financial decision-making. In particular, analyzing returns, volatility and the relationships between assets provide essential insights into market dynamics and limits to diversification.
+\vspace{0.3cm}
+
+The objective of this report is to explore the properties of several major technology stocks such as Apple, Microsoft, AMD and Nvidia. By focusing on this sector, our study aims to highlight differences in performance and risk profiles, as well as the degree of similarity between assets' movements.
+\vspace{0.3cm}
+
+To achieve this, historical price data is collected using Python, and standard financial metrics are computed, including daily returns, annualized returns, volatility, Sharpe ratio and correlation coefficients. This study also extends to observation of market behaviour during periods of financial stress in order to better understand how risk and diversification evolve over time.
+\vspace{0.3cm}
+
+This report will unfold as follows. First the data and methodology are presented. Then, the performance and risk characteristics of each asset are analyzed. This is followed by a study of correlations and their implications for diversification. Finally, a specific focus is placed on the 2020 crisis period before concluding with key insights.
+
+
+\section{Data and Methodology}
+
+\subsection{Data collection}
+
+In order to analyze financial assets, gathering historical data is essential. This is done through the \textcolor{blue}{\href{https://pypi.org/project/yfinance/}{yfinance}} Python library, and using Yahoo Finance's API in order to download historical market data. We analyzed the following assets: 
+
+
+\vspace{0.3cm}
+
+\begin{itemize}
+    \item Apple (AAPL)
+    \item Microsoft (MSFT)
+    \item Nvidia (NVDA)
+    \item AMD (AMD)
+\end{itemize}
+\vspace{0.3cm}
+In python this is translated by: 
+
+\begin{lstlisting}
+    tickers = ["MSFT", "AAPL", "NVDA", "AMD"]
+
+    data = yf.download(tickers, start="2015-01-01", end="2026-01-04", auto_adjust = True) #Price adjusted for corporate actions
+
+    data = data["Close"]
+\end{lstlisting}
+
+\vspace{0.3cm}
+
+Tickers is a list containing our study group's tickers and the \texttt{auto\_ajusts} parameter is set to \texttt{True} giving us adjusted market prices. This is due to increasing the accuracy of our study as corporate events have an effect beyond market close. Since our study period is 10 years, corporate actions are bound to occur, thus the necessity of using adjusted prices. Granting us an accurate record of our assets performance.
+
+\pagebreak
+
+
+And then since the \texttt{yfinance} download method imports a large array of statistics relevant to selected tickers, we select only the "Close" column where closing prices are located.
+
+
+\subsection{Methodology}
+
+\subsubsection{Data Visualization}
+
+In order to visualize our data and following computed data a plotting function was created, allowing for a flexible number of plots on a single graph for easy data Visualization and comparison.\footcite{matplotlib}
+
+\subsubsection{Mathematical Formulas}
+
+Daily returns are computed as:
+
+
+$$ r_t = \frac{P_t - P_{t-1}}{P_{t-1}} $$
+
+
+where:
+\begin{itemize}
+    \item $P_t$ is the price at time  $t$
+    \item $r_t$ is the return at time $t$
+\end{itemize}
+
+Yet to compare assets with different price scales, prices need to be normalized:
+
+
+$$ P_{norm} = \frac{P_t}{P_0} $$
+
+
+This transformation allows comparison of relative growth over time rather than absolute price levels.
+
+\vspace{0.3cm}
+
+\textbf{Volatility} is measured as the standard deviation of returns:
+
+
+$$ \sigma = \sqrt{\frac{1}{N} \sum_{t=1}^{N} (r_t - \bar{r})^2} = \sqrt{\mathbb{V}ar(r)} $$
+
+(With $\bar{r}$ representing the average return over the period)
+
+Consequently, higher volatility indicates higher risk and variability.
+\vspace{0.3cm}
+
+\textbf{Correlation} between two assets \( X \) and \( Y \) is defined as:
+
+
+ $$\mathbb{C}or(X,Y) = \frac{\mathbb{C}ov(X,Y)}{\sigma_X \sigma_Y} $$
+
+
+Values range from -1 to 1:
+\begin{itemize}
+    \item 1 → perfect positive correlation
+    \item 0 → no correlation
+    \item -1 → perfect negative correlation
+\end{itemize}\footcite{sorbonne_datascience_course}
+
+\pagebreak
+
+The \textbf{Sharpe ratio} is defined as\footcite{HommUlrich2012BtSr}:
+
+$$ S= \frac{R_p - R_f}{\sigma_p}$$
+
+with:
+\begin{itemize}
+    \item $R_p$ = portfolio/asset return
+    \item $R_f$ = risk-free rate
+    \item $\sigma_p$ = volatility 
+\end{itemize}
+
+Yet for an individual asset, the Sharpe ratio is computed as:
+
+$$
+S = \frac{\mu - R_f}{\sigma}
+$$
+
+with: 
+\begin{itemize}
+    \item $\mu$ = average return over time period
+    \item $\sigma$ = volatility
+    \item $R_f$ = risk-free rate
+\end{itemize}
+
+In this analysis, the risk-free rate is approximated to 0 for simplicity. In practice, the risk-free rate corresponds to returns on short-term government bonds.
+However, since these rates are relatively small compared to stock market returns, this approximation does not significantly affect comparative results.
+
+\vspace{0.3cm}
+\subsection{Python Translation and Computation}
+To compute and limit repetition, those formulas\footcite{numpy} were computed inside of the following function: 
+
+\begin{lstlisting}
+    def compute_stats(data):
+        returns = data.pct_change().dropna() 
+        returns = returns * 100
+        stats = pd.DataFrame()
+        stats["mean daily return"] = returns.mean()
+        stats["yearly return"] = stats["mean daily return"] * TRADING_DAYS
+        stats["yearly volatility"] = returns.std() * np.sqrt(TRADING_DAYS)
+    return returns, stats
+\end{lstlisting}
+
+With \texttt{TRADING\_DAYS} being a constant set at \texttt{252} approximating the number days where market are open per year.
+\pagebreak
+\section{Performance and Risk Analysis}
+
+This section's goal is to analyze performance and the associated Risk of each asset studied in order to determine which had better performance over the studied time period, the associated risk, and explore the root causes of each asset's exhibited performance.
+\subsection{Key figures}
+\begin{figure}[h]
+
+  \begin{subfigure}{0.45\textwidth}
+    \includegraphics[width=\linewidth]{Figures/stock_price_10y_N.png}
+    \caption{ }
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}{0.45\textwidth}
+    \includegraphics[width=\linewidth]{Figures/MSFT_vs_AAPL_stock_p_10yN.png}
+    \caption{ }
+  \end{subfigure}
+
+  \vspace{0.5cm}
+
+  \begin{subfigure}{0.45\textwidth}
+    \includegraphics[width=\linewidth]{Figures/daily_returns.png}
+    \caption{ }
+  \end{subfigure}
+  \hfill
+    \begin{subfigure}{0.45\textwidth}
+    \includegraphics[width=\linewidth]{Figures/Y_Volatility_10y.png}
+    \caption{ }
+  \end{subfigure}
+
+  \caption{Assets Caracteristics Key Visualization}
+\end{figure}
+
+\subsection{Observations and Dicussion}
+
+
+The first obvious observation on figure 1.a is that Nvidia is clearly the best performing stock of our study group. This means that for every dollar invested in 2016, the investor would've gained about \$400. Leading to other stocks looking flat in comparison, not because they're bad but because they are overshadowed by Nvidia.
+\pagebreak
+
+With intent of studying each asset, a new normalized price graph was plotted 1.b, where by plotting exclusively the lower bracket, growth of Microsoft and Apple is much more striking, it is also much more obvious how positively correlated Apple is with Microsoft greatly limiting diversification.
+
+\vspace{0.3cm}
+In a nutshell, one stock with extreme performance (Nvidia) can dominate a normalized price chart, making it difficult to actually compare their assets. Alternative scaling (such as logarithmic scale) provides a more balanced view.
+
+
+
+Furthermore, as seen on figure 1.c, AMD followed by Nvidia have the widest range of variations during our studied time period, we even observe a large spike of 50\% in 2016, this is an exceptionally high day return.
+
+\vspace{0.3cm}
+The spike in question happened 2016-04-22, financial press speaks of the "best day [for AMD shares] in over 40 years"\footcite{marketwatch_amd} \textcolor{blue}{\href{https://www.marketwatch.com/story/amds-stock-has-best-day-in-40-years-after-china-jv-deal-q1-results-2016-04-22}{Market watch article}} and another article from Yahoo Finance explains \textcolor{blue}{\href{https://finance.yahoo.com/news/why-did-amd-stock-jump-154505561.html?guccounter=1}{Why Did AMD’s Stock Jump More Than 50\% in a Day?}}\footcite{yahoo_amd_jump}
+The apparent reasons for the spike were strong 2016 Q1 performance coupled with a licensing agreement with China and design wins for 3 semi-custom processors.
+Additionally, this jump is also explained by the low price of AMD's shares in 2016, leading to an incredibly high return.\footcite{forbes_amd}
+
+\vspace{0.3cm}
+In short, large apparent spikes in returns can result from low initial price levels, big news or earnings anouncements. Zooming into shorter timeframes helps better interpret these movements.
+
+\vspace{0.3cm}
+Yet, since some assets exhibit extreme daily returns, such as AMD with moves exceeding 50\% in a single trading day, these outliers highlight the high volatility of certain stocks, particularly during periods of structural change, crisis, or market uncertainty. And thus, larger positive returns are often associated with higher overall volatility, showing that a strong performance comes with significant risk. This is highlighted by figure 1.d and AMD's yearly volatility averaging 58.8\%, a very high volatility. Closely followed by Nvidia (NVDA) averaging a volatility of 48.7\%. However, as surprising as it might seem, AMD and Nvdia were the best assets to hold during the time period studied. This surprising observations shines light on the fact that an array of metrics are necessary in order to evaluate the risk and returns offered by an asset.
+
+\vspace{0.3cm}
+\subsection{Risk Evalutation through the Sharpe Ratio}
+To extend, in order to determine which asset rewarded the investor with the best returns for the risk taken. In short, Sharpe's ratio represents how much return you get per unit of risk. Naturally, high return and low risk are important, the Sharpe's ratio tells us how efficiently we combine both. Computation yielded the following results: 
+\vspace{0.15cm}
+\begin{center}
+    \begin{tabular}{|| c c ||}
+        \hline
+        Tickers & Associated Sharpe Ratio \\ [0.5ex]
+        \hline \hline
+        AAPL &  0.906949 \\
+        \hline
+        AMD  &  0.973193 \\
+        \hline
+        MSFT  &  0.972633 \\
+        \hline
+        NVDA  &  1.359236 \\
+        \hline
+    \end{tabular}
+\end{center}
+\vspace{0.15cm}
+
+Nvidia exhibits the highest Sharpe Ratio among the selected assets, indicating superior risk-adjusted performance over the period. This result is driven by exceptionally strong returns that more than compensate for its high volatility. However, this performance should be interpreted with caution, as it may reflect favorable market conditions specific to the period rather than a stable long-term characteristic.
+
+\pagebreak
+\section{How correlated are Tech giants ?}
+
+With the intention of building diversified portfolios, it is important to understand to what degree each asset is correlated to one another. Even inside of the Tech industry, major disparity can appear, notably thanks to the large array of sub industries and solutions each company offers. This is the reason why studying correlation between 2 or more stocks is valuable.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.45\textwidth]{Figures/Corr_M_10y.png}
+    \caption{Correlation Matrix of studied assets}
+\end{figure}
+
+
+One observation to be made is the fact that correlation between each stock ranges from 0.4 to 0.7, meaning they are positively correlated to one another. This is due to the fact that despite differing internal structure and business cycles, these stocks share a common exposure to market-wide factors, which drives their returns to move in a broadly similar way. However it is worthy to make a distinction between causation and correlation, a correlation doesn't mean that there is an effect of causation between our studied stocks.
+
+
+\vspace{0.3cm}
+
+From an investor's point of view, strong positive correlations between those assets suggest that a portfolio built upon only tech assets would suffer from a lack of diversification, leading to being overexposed to market wide fluctuations and industry trends. In short, due to their positive correlation long tech stocks positions are unfit to hedge other tech stocks long positions.
+\pagebreak
+\section{How do Crises Impact Markets ? A Study of the 2020 Pandemic}
+
+This part's objective is to examine how market reacts during crisis and heavy market stress, rephrased we will study the array of metrics presented in prior parts and compare and contrast them in order to evaluate the implications on market stress on tech assets.
+
+\vspace{0.3cm}
+In order to select data from the relevant time period, we use the \texttt{.loc} method from the Pandas library.
+\begin{lstlisting}
+    crisis = data.loc["2020-01-01":"2020-12-31"]
+\end{lstlisting}
+
+
+
+\subsection{Key figures}
+\begin{figure}[h]
+
+  \begin{subfigure}{0.45\textwidth}
+    \includegraphics[width=\linewidth]{Figures/stock_price_crisis2020.png}
+    \caption{ }
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}{0.45\textwidth}
+    \includegraphics[width=\linewidth]{Figures/Corr_M_crisis2020.png}
+    \caption{ }
+  \end{subfigure}
+
+  \vspace{0.5cm}
+
+  \begin{subfigure}{0.45\textwidth}
+    \includegraphics[width=\linewidth]{Figures/Y_Volatility_crisis2020.png}
+    \caption{ }
+  \end{subfigure}
+  \hfill
+    \begin{subfigure}{0.45\textwidth}
+    \includegraphics[width=\linewidth]{Figures/Y_Volatility_10y.png}
+    \caption{ }
+  \end{subfigure}
+
+  \caption{Assets Caracteristics Key Visualization during Market Stress}
+\end{figure}
+\pagebreak
+\subsection{Result Analysis and Dicussion}
+
+Surprisingly, despite lockdowns and the pandemic, performances of our study group were excellent in 2020 figure 3.a . This shows that certain sectors can be impacted more than others in times of crisis. Yet the key study point is the correlation Matrix, which will give us insight as to how our study group acted one to another.
+\vspace{0.3cm}
+
+We can then see on figure 3.b that our tech giants are heavily correlated one to another, as a matter of fact, the lowest correlation factor in 2020 equates to the highest factor on the 10 year study. This shows that during market stress, correlation between actors of an industry increases, their behavior tends to follow the same framework. This reduces portfolio diversification exactly when you need it the most.
+
+\vspace{0.3cm}
+Furthermore, on average, volatility was greater during the 2020 crisis, mainly due to market uncertainty and instability. It is valuable to retain the fact that over a longer study period, volatility is smoothed. However we can still state that under market tension, volatility and risk increases for the portfolio owner.
+
+\vspace{0.3cm}
+In short, during market crises assets of the same sector tend to follow the same framework, mainly due to industry wide dominant factors, this aligns assets one to another and greatly limits diversification. As a result, since uncertainty rules markets, volatility increases which compounds with the augmented correlation creating a dangerous situation for overexposed investors.
+
+\section{Conclusion}
+
+This project aimed to explore the fundamental characteristics of financial assets through the analysis of major technology stocks, focusing on returns, volatility, and correlations.
+
+\vspace{0.3cm}
+The results highlight clear differences in performance and risk profiles across assets. In particular, Nvidia stands out with significantly higher returns, but this performance is accompanied by substantially higher volatility, illustrating the classic risk-return tradeoff. In contrast, companies such as Microsoft and Apple exhibit more moderate returns with lower levels of risk.
+
+\vspace{0.3cm}
+The correlation analysis reveals strong positive relationships between the selected stocks, reflecting their exposure to the same sector. This limits the effectiveness of diversification within a technology-only portfolio. Moreover, the analysis of crisis periods shows that correlations tend to increase during market stress, reducing diversification benefits precisely when they are most needed. These periods are also characterized by sharp increases in volatility, emphasizing the dynamic nature of financial risk.
+
+\vspace{0.3cm}
+Overall, this study demonstrates that relying solely on technology stocks does not provide sufficient diversification. A well-balanced portfolio requires exposure to multiple sectors and asset classes. More broadly, the results reinforce a key principle of finance: higher expected returns are typically associated with higher levels of risk.
+
+\vspace{0.3cm}
+This project provides a foundation for further analysis, particularly in portfolio construction and optimization, where these concepts can be applied to build more efficient investment strategies.
+
+\pagebreak
+\section{References}
+{\setstretch{1.5}%
+\printbibliography[title = {Bibliography}]
+}
+\end{document}

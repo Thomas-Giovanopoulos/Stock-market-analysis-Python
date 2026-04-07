@@ -55,8 +55,8 @@ $$ r_t = \frac{P_t - P_{t-1}}{P_{t-1}} $$
 
 
 where:
-- $ P_t $ is the price at time  $t$
-- $ r_t $ is the return at time $t$
+- $P_t$ is the price at time  $t$
+- $r_t$ is the return at time $t$
 
 ### Normalization
 
