@@ -228,17 +228,20 @@ However, since these rates are relatively small compared to stock market returns
 To compute and limit repetition, those formulas\footcite{numpy} were computed inside of the following function: 
 
 \begin{lstlisting}
-    def compute_stats(data):
-        returns = data.pct_change().dropna() 
-        returns = returns * 100
-        stats = pd.DataFrame()
-        stats["mean daily return"] = returns.mean()
-        stats["yearly return"] = stats["mean daily return"] * TRADING_DAYS
-        stats["yearly volatility"] = returns.std() * np.sqrt(TRADING_DAYS)
+ def compute_stats(data, tickers, freq):
+    returns = data.pct_change().dropna() 
+    returns = returns * 100
+
+    stats = pd.DataFrame()
+
+    stats["mean daily return"] = returns.mean()
+    stats["annualized return"] = stats["mean daily return"] * freq
+    stats["annualized volatility"] = returns.std() * np.sqrt(freq)
+    stats = stats.loc[tickers] #assumes tickers is not None
     return returns, stats
 \end{lstlisting}
 
-With \texttt{TRADING\_DAYS} being a constant set at \texttt{252} approximating the number days where market are open per year.
+Through our study, the frequency \texttt{freq} was passed as the constant \texttt{TRADING\_DAYS} set at \texttt{252} approximating the number days where market are open per year.
 \vspace{0.3cm}
 All returns and volatility measures are expressed in percentage terms.
 \pagebreak
