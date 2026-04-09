@@ -133,15 +133,15 @@ this approximation does not significantly affect comparative results.
 
 ### Correlation Matrix Comparison
 
-![Correlation Matrix Heatmap Long Term (2016-2026)](https://github.com/Thomas-Giovanopoulos/Stock-market-analysis/blob/638bdcb8e92b177c759151967eaf85dc23dc4aa1/Figures/Corr_M_10y.png)
+![Correlation Matrix Heatmap Long Term (2016-2026)](https://github.com/Thomas-Giovanopoulos/Stock-market-analysis-Python/blob/52004941f578e90c1f2e05a4a07f09c5dfabc1df/Figures/Corr_M_10y.png)
 
-![Correlation Matrix Heatmap Crisis (2020)](https://github.com/Thomas-Giovanopoulos/Stock-market-analysis-Python/blob/495638c8b6ba8374039d2f6fc26db880876187a6/Figures/Corr_M_crisis2020.png)
+![Correlation Matrix Heatmap Crisis (2020)](https://github.com/Thomas-Giovanopoulos/Stock-market-analysis-Python/blob/52004941f578e90c1f2e05a4a07f09c5dfabc1df/Figures/Corr_M_crisis2020.png)
 
 ### Volatility Comparison
 
-![Annualized Volatility Long Term (2016-2026)](https://github.com/Thomas-Giovanopoulos/Stock-market-analysis/blob/c5c9b55d98b8d842c6b911ff561d512c4b4be9ca/Figures/Y_Volatility_10y.png)
+![Annualized Volatility Long Term (2016-2026)](https://github.com/Thomas-Giovanopoulos/Stock-market-analysis-Python/blob/52004941f578e90c1f2e05a4a07f09c5dfabc1df/Figures/Y_Volatility_10y.png)
 
-![Annualized Volatility Crisis (2020)](https://github.com/Thomas-Giovanopoulos/Stock-market-analysis-Python/blob/495638c8b6ba8374039d2f6fc26db880876187a6/Figures/Y_Volatility_crisis2020.png)
+![Annualized Volatility Crisis (2020)](https://github.com/Thomas-Giovanopoulos/Stock-market-analysis-Python/blob/52004941f578e90c1f2e05a4a07f09c5dfabc1df/Figures/Y_Volatility_crisis2020.png)
 
 
 ### Tables
